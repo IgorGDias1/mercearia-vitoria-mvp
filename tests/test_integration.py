@@ -133,3 +133,17 @@ def test_inactive_product_cannot_be_sold_even_if_posted(app, logged, seed_produc
     with app.app_context():
         assert db.sales_summary()["n"] == 0
         assert db.get_product(seed_products["velho"])["stock"] == 5
+
+
+def test_missing_secret_key_gets_random_temporary_key(tmp_path):
+    from app import create_app
+    a = create_app({"TESTING": True, "DATABASE": str(tmp_path / "a.db"), "SECRET_KEY": None})
+    b = create_app({"TESTING": True, "DATABASE": str(tmp_path / "b.db"), "SECRET_KEY": None})
+    assert a.config["SECRET_KEY"] and len(a.config["SECRET_KEY"]) >= 32
+    assert a.config["SECRET_KEY"] != "troque-esta-chave-em-producao"
+    assert a.config["SECRET_KEY"] != b.config["SECRET_KEY"]
+
+
+def test_session_cookie_flags(app):
+    assert app.config["SESSION_COOKIE_HTTPONLY"] is True
+    assert app.config["SESSION_COOKIE_SAMESITE"] == "Lax"
