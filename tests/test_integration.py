@@ -119,3 +119,17 @@ def test_sql_injection_in_search_is_harmless(app, logged, seed_products):
 
 def test_reports_page(logged, seed_products):
     assert logged.get("/relatorios").status_code == 200
+
+
+def test_inactive_product_cannot_be_sold_even_if_posted(app, logged, seed_products):
+    """Mesmo forjando o campo no formulário, o produto inativo nunca é vendido nem baixado."""
+    token = get_csrf(logged, "/vendas/nova")
+    resp = logged.post("/vendas/nova", data={
+        "_csrf": token,
+        f"qty_{seed_products['velho']}": "1",
+    })
+    assert resp.status_code == 400
+    assert "Venda registrada com sucesso" not in resp.get_data(as_text=True)
+    with app.app_context():
+        assert db.sales_summary()["n"] == 0
+        assert db.get_product(seed_products["velho"])["stock"] == 5
