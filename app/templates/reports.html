@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Relatórios — Mercearia Vitória{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Relatórios</h1>
+<p class="text-muted">Versão inicial, sem filtros: o conteúdo dos relatórios ainda será definido com a mercearia.</p>
+
+<h2 class="h5 mt-4">Vendas</h2>
+<p>{{ summary.n }} venda(s) registrada(s), somando {{ summary.total|brl }}.</p>
+{% if sales %}
+<div class="table-responsive">
+  <table class="table table-striped">
+    <caption class="visually-hidden">Últimas vendas registradas</caption>
+    <thead><tr><th scope="col">Venda</th><th scope="col">Data e hora</th>
+      <th scope="col" class="text-end">Itens</th><th scope="col" class="text-end">Total</th></tr></thead>
+    <tbody>
+      {% for s in sales %}
+      <tr><td>{{ s.id }}</td><td>{{ s.created_at }}</td>
+          <td class="text-end">{{ s.items_count }}</td><td class="text-end">{{ s.total_cents|brl }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+<h2 class="h5 mt-4">Estoque</h2>
+{% if products %}
+<div class="table-responsive">
+  <table class="table table-striped">
+    <caption class="visually-hidden">Estoque atual dos produtos</caption>
+    <thead><tr><th scope="col">Produto</th><th scope="col" class="text-end">Estoque</th>
+      <th scope="col">Situação</th></tr></thead>
+    <tbody>
+      {% for p in products %}
+      <tr><td>{{ p.name }}</td><td class="text-end">{{ p.stock }}</td>
+          <td>{{ 'Ativo' if p.active else 'Inativo' }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p>Nenhum produto cadastrado.</p>
+{% endif %}
+{% endblock %}

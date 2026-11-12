@@ -1,0 +1,47 @@
+/* Acessibilidade: contraste, foco visível, alvos de toque de no mínimo 44x44 px. */
+:root {
+  --brand: #7a2e0e;        /* contraste ≥ 7:1 com branco */
+  --brand-dark: #5c2109;
+}
+
+body { font-size: 1.05rem; }
+
+.site-header { background: var(--brand); color: #fff; }
+.site-header .brand { color: #fff; font-weight: 700; font-size: 1.3rem; text-decoration: none; }
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0; background: #fff; color: #000;
+  padding: .75rem 1rem; z-index: 1000;
+}
+.skip-link:focus { left: 0; }
+
+/* alvos de toque mínimos */
+.btn, .form-control, .form-check-input { min-height: 44px; }
+.btn { min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
+.btn-sm { min-height: 44px; }
+.form-check-input { min-width: 44px; width: 1.6rem; height: 1.6rem; min-height: 1.6rem; }
+
+.btn-primary { background-color: var(--brand); border-color: var(--brand); }
+.btn-primary:hover, .btn-primary:focus { background-color: var(--brand-dark); border-color: var(--brand-dark); }
+.btn-outline-primary { color: var(--brand); border-color: var(--brand); }
+.btn-outline-primary:hover { background-color: var(--brand); border-color: var(--brand); }
+a { color: var(--brand); }
+
+/* indicador de foco bem visível */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid #0b57d0; outline-offset: 2px; box-shadow: none;
+}
+
+.alert-icon { font-weight: 700; font-size: 1.25rem; line-height: 1.3; }
+
+.menu-card {
+  display: flex; flex-direction: column; gap: .5rem; height: 100%;
+  padding: 1.25rem; border: 2px solid var(--brand); border-radius: .75rem;
+  text-decoration: none; color: #212529; background: #fff;
+}
+.menu-card:hover { background: #fbf1ec; }
+.menu-title { font-weight: 700; font-size: 1.2rem; color: var(--brand); }
+.menu-desc { font-size: .95rem; }
+
+.form-narrow { max-width: 32rem; }
+.qty-input { max-width: 8rem; }

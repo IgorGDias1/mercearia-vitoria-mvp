@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if product else 'Cadastrar' }} produto — Mercearia Vitória{% endblock %}
+{% block content %}
+{% set v_name = form.get('name', product.name if product else '') %}
+{% set v_price = form.get('price', ('%.2f'|format(product.price_cents / 100)).replace('.', ',') if product else '') %}
+{% set v_stock = form.get('stock', product.stock if product else 0) %}
+{% set v_active = (form.get('active') == 'on') if form else (product.active if product else True) %}
+
+<h1 class="h3 mb-3">{{ 'Editar produto' if product else 'Cadastrar produto' }}</h1>
+<form method="post" novalidate class="form-narrow">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="mb-3">
+    <label class="form-label" for="name">Nome do produto</label>
+    <input class="form-control" id="name" name="name" maxlength="120" required value="{{ v_name }}">
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="price">Preço de venda (R$)</label>
+    <input class="form-control" id="price" name="price" inputmode="decimal" required
+           aria-describedby="price-help" value="{{ v_price }}">
+    <div id="price-help" class="form-text">Use vírgula para os centavos, por exemplo 12,50.</div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="stock">Quantidade em estoque</label>
+    <input class="form-control" id="stock" name="stock" type="number" min="0" step="1" value="{{ v_stock }}">
+  </div>
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" id="active" name="active" {{ 'checked' if v_active }}>
+    <label class="form-check-label" for="active">Produto ativo (disponível para venda)</label>
+  </div>
+  <button class="btn btn-primary" type="submit">Salvar</button>
+  <a class="btn btn-outline-secondary" href="{{ url_for('main.products') }}">Cancelar</a>
+</form>
+{% endblock %}

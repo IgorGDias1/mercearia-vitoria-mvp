@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Registrar venda — Mercearia Vitória{% endblock %}
+{% block content %}
+<h1 class="h3 mb-2">Registrar venda</h1>
+<p id="instrucoes">Informe a quantidade de cada produto vendido. Produtos com quantidade vazia ou zero não entram na venda.</p>
+
+{% if products %}
+<form method="post" id="sale-form" novalidate aria-describedby="instrucoes">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <caption class="visually-hidden">Produtos ativos disponíveis para venda</caption>
+      <thead>
+        <tr><th scope="col">Produto</th><th scope="col" class="text-end">Preço</th>
+            <th scope="col" class="text-end">Estoque</th>
+            <th scope="col">Quantidade</th><th scope="col" class="text-end">Subtotal</th></tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <th scope="row" class="fw-normal"><label for="qty_{{ p.id }}">{{ p.name }}</label></th>
+          <td class="text-end" data-price="{{ p.price_cents }}">{{ p.price_cents|brl }}</td>
+          <td class="text-end">{{ p.stock }}</td>
+          <td>
+            <input class="form-control qty-input" id="qty_{{ p.id }}" name="qty_{{ p.id }}"
+                   type="number" min="0" step="1" inputmode="numeric"
+                   data-price="{{ p.price_cents }}" value="{{ entered.get(p.id, '') }}">
+          </td>
+          <td class="text-end subtotal" data-for="qty_{{ p.id }}">R$ 0,00</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row" colspan="4" class="text-end">Total da venda</th>
+          <td class="text-end fs-5 fw-bold" id="total" aria-live="polite">R$ 0,00</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <button class="btn btn-primary btn-lg" type="submit">Confirmar venda</button>
+  <a class="btn btn-outline-secondary btn-lg" href="{{ url_for('main.menu') }}">Voltar ao menu</a>
+</form>
+<script>
+  // Cálculo apenas para visualização; o servidor recalcula tudo com os preços do banco.
+  (function () {
+    var fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    function update() {
+      var total = 0;
+      document.querySelectorAll('.qty-input').forEach(function (input) {
+        var qty = parseInt(input.value, 10);
+        var sub = (isNaN(qty) || qty < 0) ? 0 : qty * parseInt(input.dataset.price, 10);
+        total += sub;
+        document.querySelector('.subtotal[data-for="' + input.id + '"]').textContent = fmt.format(sub / 100);
+      });
+      document.getElementById('total').textContent = fmt.format(total / 100);
+    }
+    document.querySelectorAll('.qty-input').forEach(function (i) { i.addEventListener('input', update); });
+    update();
+  })();
+</script>
+{% else %}
+<p>Não há produtos ativos. <a href="{{ url_for('main.product_new') }}">Cadastre um produto</a> para começar.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Entrar — Mercearia Vitória{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-6 col-lg-4">
+    <h1 class="h3 mb-3">Entrar</h1>
+    <form method="post" novalidate>
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <div class="mb-3">
+        <label class="form-label" for="username">Usuário</label>
+        <input class="form-control" id="username" name="username" autocomplete="username" required autofocus>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="password">Senha</label>
+        <input class="form-control" id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn-primary w-100" type="submit">Entrar</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

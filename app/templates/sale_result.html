@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Venda registrada — Mercearia Vitória{% endblock %}
+{% block content %}
+<div class="alert alert-success d-flex align-items-start gap-2" role="status">
+  <span class="alert-icon" aria-hidden="true">✔</span>
+  <div><strong>Sucesso:</strong> {{ message }}</div>
+</div>
+<p>Venda nº {{ sale_id }} — total {{ total|brl }}.</p>
+<a class="btn btn-primary btn-lg" href="{{ url_for('main.sale_new') }}">Nova venda</a>
+<a class="btn btn-outline-secondary btn-lg" href="{{ url_for('main.menu') }}">Voltar ao menu</a>
+{% endblock %}

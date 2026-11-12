@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Menu — Mercearia Vitória{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4">Menu</h1>
+<div class="row g-3">
+  <div class="col-12 col-md-6 col-lg-3">
+    <a class="menu-card" href="{{ url_for('main.sale_new') }}">
+      <span class="menu-title">Registrar vendas</span>
+      <span class="menu-desc">Selecionar produtos, informar quantidades e confirmar a venda.</span>
+    </a>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <a class="menu-card" href="{{ url_for('main.products') }}">
+      <span class="menu-title">Consultar produtos</span>
+      <span class="menu-desc">Ver produtos, preços e estoque.</span>
+    </a>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <a class="menu-card" href="{{ url_for('main.product_new') }}">
+      <span class="menu-title">Cadastrar produtos</span>
+      <span class="menu-desc">Incluir um novo produto.</span>
+    </a>
+  </div>
+  <div class="col-12 col-md-6 col-lg-3">
+    <a class="menu-card" href="{{ url_for('main.reports') }}">
+      <span class="menu-title">Relatórios</span>
+      <span class="menu-desc">Consultar vendas e estoque.</span>
+    </a>
+  </div>
+</div>
+{% endblock %}

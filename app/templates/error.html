@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Erro — Mercearia Vitória{% endblock %}
+{% block content %}
+<div class="alert alert-danger d-flex align-items-start gap-2" role="alert">
+  <span class="alert-icon" aria-hidden="true">✖</span>
+  <div><strong>Erro:</strong>
+    {% if error.code == 404 %}Página não encontrada.{% else %}{{ error.description }}{% endif %}
+  </div>
+</div>
+<a class="btn btn-primary" href="{{ url_for('main.menu') }}">Voltar ao menu</a>
+{% endblock %}
