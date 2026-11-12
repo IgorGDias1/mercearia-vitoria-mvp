@@ -62,3 +62,23 @@ def test_product_form_validation():
     assert (name, cents, stock, active) == ("Café", 990, 3, True)
     with pytest.raises(ValidationError):
         services.validate_product_form({"name": "x", "price": "1", "stock": "-2"})
+
+
+@pytest.mark.parametrize("text,cents", [
+    ("  9,90  ", 990), ("0,05", 5), ("1000", 100000), ("2.5", 250), ("R$12,5", 1250),
+])
+def test_parse_price_edge_cases_ok(text, cents):
+    assert services.parse_price_to_cents(text) == cents
+
+
+@pytest.mark.parametrize("text", ["12,345", "1,2,3", "--5", "R$", "12abc", None])
+def test_parse_price_edge_cases_invalid(text):
+    with pytest.raises(ValidationError):
+        services.parse_price_to_cents(text)
+
+
+@pytest.mark.parametrize("cents,expected", [
+    (0, "R$ 0,00"), (5, "R$ 0,05"), (123456, "R$ 1.234,56"), (100000000, "R$ 1.000.000,00"),
+])
+def test_format_brl_edge_cases(cents, expected):
+    assert services.format_brl(cents) == expected
