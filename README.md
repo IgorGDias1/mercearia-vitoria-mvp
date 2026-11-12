@@ -24,6 +24,20 @@ export SECRET_KEY="uma-chave-longa-e-aleatoria"
 python run.py                        # http://127.0.0.1:5000
 ```
 
+### No Windows (PowerShell)
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1          # se bloquear: Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+pip install -r requirements-dev.txt
+
+flask --app run create-user caixa       # pede a senha; cria o primeiro usuário
+$env:SECRET_KEY = "uma-chave-longa-e-aleatoria"
+python run.py                           # http://127.0.0.1:5000
+```
+
+No Prompt de Comando (cmd), ative com `.venv\Scripts\activate.bat` e defina a chave com `set SECRET_KEY=...`.
+
 Testes: `python -m pytest -v`
 
 ## Funcionalidades (escopo do MVP)
