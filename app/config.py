@@ -19,6 +19,10 @@ class Config:
     # Mantido como opção. Altere para False se a mercearia decidir que não.
     STOCK_DEDUCT_ON_SALE = os.environ.get("STOCK_DEDUCT_ON_SALE", "1") == "1"
 
+    # Alerta de estoque baixo (sugerido pelo representante da mercearia na validação).
+    # O limite exato NÃO foi definido pela mercearia: valor provisório, ajustável por variável de ambiente.
+    LOW_STOCK_THRESHOLD = int(os.environ.get("LOW_STOCK_THRESHOLD", "5"))
+
     # Defina SESSION_COOKIE_SECURE=1 quando o sistema for servido por HTTPS.
     SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", "0") == "1"
     SESSION_COOKIE_HTTPONLY = True

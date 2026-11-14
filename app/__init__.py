@@ -33,6 +33,14 @@ def create_app(test_config=None):
     app.register_blueprint(routes.bp)
     app.jinja_env.filters["brl"] = services.format_brl
 
+    @app.context_processor
+    def _stock_alert_helpers():
+        threshold = app.config["LOW_STOCK_THRESHOLD"]
+        return {
+            "low_stock_threshold": threshold,
+            "is_low_stock": lambda p: services.is_low_stock(p, threshold),
+        }
+
     @app.errorhandler(400)
     @app.errorhandler(404)
     def _error(err):
