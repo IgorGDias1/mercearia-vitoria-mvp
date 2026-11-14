@@ -147,3 +147,9 @@ def test_missing_secret_key_gets_random_temporary_key(tmp_path):
 def test_session_cookie_flags(app):
     assert app.config["SESSION_COOKIE_HTTPONLY"] is True
     assert app.config["SESSION_COOKIE_SAMESITE"] == "Lax"
+
+
+def test_health_endpoint_is_public_and_ok(client):
+    resp = client.get("/saude")
+    assert resp.status_code == 200
+    assert resp.get_json() == {"status": "ok"}
