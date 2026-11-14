@@ -58,6 +58,7 @@ O documento do projeto marca estes pontos como NÃO DEFINIDO. Onde o código pre
 | Baixa de estoque após a venda | Dá baixa automática e **bloqueia** venda acima do estoque | `STOCK_DEDUCT_ON_SALE=0` desliga a baixa (`app/config.py`) |
 | Quantidades | Apenas números inteiros (venda por peso não definida) | `services.build_sale_items` |
 | Arredondamento | Valores em centavos inteiros; preço com no máximo 2 casas | `services.parse_price_to_cents` |
+| Chave secreta | Sem `SECRET_KEY`, gera chave aleatória temporária (logins caem ao reiniciar) | variável de ambiente `SECRET_KEY` |
 | Expiração de sessão | 8 horas (provisório) | `PERMANENT_SESSION_LIFETIME` |
 | Relatórios | Sem filtros nem exportação | `routes.reports`, `templates/reports.html` |
 | Perfis/permissões | Todo usuário logado acessa tudo | `app/auth.py` |

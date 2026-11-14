@@ -5,6 +5,8 @@ Camadas:
   services.py            -> regras de negócio
   db.py / schema.sql     -> acesso e persistência de dados
 """
+import secrets
+
 from flask import Flask, render_template
 
 from . import auth, db, routes, services
@@ -16,6 +18,14 @@ def create_app(test_config=None):
     app.config.from_object(Config)
     if test_config:
         app.config.update(test_config)
+
+    if not app.config.get("SECRET_KEY"):
+        # Chave temporária: as sessões deixam de valer quando o servidor reinicia.
+        app.config["SECRET_KEY"] = secrets.token_hex(32)
+        app.logger.warning(
+            "SECRET_KEY não definida: usando chave aleatória temporária. "
+            "Defina a variável de ambiente SECRET_KEY para manter os logins entre reinícios."
+        )
 
     db.init_app(app)
     auth.init_app(app)
