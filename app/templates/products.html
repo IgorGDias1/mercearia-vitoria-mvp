@@ -16,6 +16,15 @@
   </div>
 </form>
 
+{% set low = products|selectattr('active')|selectattr('stock', 'le', low_stock_threshold)|list %}
+{% if low %}
+<div class="alert alert-warning d-flex gap-2" role="alert">
+  <span class="alert-icon" aria-hidden="true">⚠</span>
+  <div><strong>Atenção:</strong> {{ low|length }} produto(s) com estoque baixo (até {{ low_stock_threshold }} unidades):
+    {{ low|map(attribute='name')|join(', ') }}.</div>
+</div>
+{% endif %}
+
 {% if products %}
 <div class="table-responsive">
   <table class="table table-striped align-middle">
@@ -30,7 +39,8 @@
       <tr>
         <td>{{ p.name }}</td>
         <td class="text-end">{{ p.price_cents|brl }}</td>
-        <td class="text-end">{{ p.stock }}</td>
+        <td class="text-end">{{ p.stock }}
+          {% if is_low_stock(p) %}<span class="badge text-bg-warning ms-1">⚠ Estoque baixo</span>{% endif %}</td>
         <td>{{ 'Ativo' if p.active else 'Inativo' }}</td>
         <td class="text-end">
           <a class="btn btn-outline-primary btn-sm" href="{{ url_for('main.product_edit', product_id=p.id) }}">

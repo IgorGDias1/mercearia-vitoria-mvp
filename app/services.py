@@ -67,6 +67,16 @@ def edit_product(product_id, form):
     db.update_product(product_id, name, price_cents, stock, active)
 
 
+# ---------- estoque ----------
+def is_low_stock(product, threshold):
+    """Produto ativo com quantidade igual ou menor que o limite mínimo precisa de reposição."""
+    return bool(product["active"]) and product["stock"] <= threshold
+
+
+def low_stock_products(products, threshold):
+    return [p for p in products if is_low_stock(p, threshold)]
+
+
 # ---------- vendas ----------
 def build_sale_items(quantities, products_by_id):
     """quantities: dict {product_id: texto_digitado}. Linhas vazias ou 0 são ignoradas.

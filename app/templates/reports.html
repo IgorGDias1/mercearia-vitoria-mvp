@@ -31,7 +31,8 @@
       <th scope="col">Situação</th></tr></thead>
     <tbody>
       {% for p in products %}
-      <tr><td>{{ p.name }}</td><td class="text-end">{{ p.stock }}</td>
+      <tr><td>{{ p.name }}</td><td class="text-end">{{ p.stock }}
+          {% if is_low_stock(p) %}<span class="badge text-bg-warning ms-1">⚠ Estoque baixo</span>{% endif %}</td>
           <td>{{ 'Ativo' if p.active else 'Inativo' }}</td></tr>
       {% endfor %}
     </tbody>

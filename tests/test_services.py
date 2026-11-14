@@ -82,3 +82,13 @@ def test_parse_price_edge_cases_invalid(text):
 ])
 def test_format_brl_edge_cases(cents, expected):
     assert services.format_brl(cents) == expected
+
+
+def test_low_stock_rules():
+    ativo_baixo = {"active": 1, "stock": 5}
+    ativo_ok = {"active": 1, "stock": 6}
+    inativo_baixo = {"active": 0, "stock": 0}
+    assert services.is_low_stock(ativo_baixo, 5)
+    assert not services.is_low_stock(ativo_ok, 5)
+    assert not services.is_low_stock(inativo_baixo, 5)
+    assert services.low_stock_products([ativo_baixo, ativo_ok, inativo_baixo], 5) == [ativo_baixo]

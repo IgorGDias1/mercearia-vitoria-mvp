@@ -8,6 +8,16 @@ from .auth import login_required
 bp = Blueprint("main", __name__)
 
 
+@bp.route("/saude")
+def health():
+    """Verificação de saúde para monitoramento (sem login e sem expor dados)."""
+    try:
+        db.get_db().execute("SELECT 1").fetchone()
+    except Exception:
+        return {"status": "erro"}, 503
+    return {"status": "ok"}
+
+
 @bp.route("/")
 @login_required
 def menu():
