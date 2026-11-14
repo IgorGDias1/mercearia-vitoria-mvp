@@ -153,3 +153,26 @@ def test_health_endpoint_is_public_and_ok(client):
     resp = client.get("/saude")
     assert resp.status_code == 200
     assert resp.get_json() == {"status": "ok"}
+
+
+def test_low_stock_alert_is_shown_on_products_page(app, logged):
+    with app.app_context():
+        db.insert_product("Arroz 5kg", 2500, 3, True)      # abaixo do limite (5)
+        db.insert_product("Feijão 1kg", 800, 50, True)     # estoque confortável
+    html = logged.get("/produtos").get_data(as_text=True)
+    assert "Estoque baixo" in html
+    assert "1 produto(s) com estoque baixo" in html
+    assert "Arroz 5kg" in html
+
+
+def test_no_low_stock_alert_when_stock_is_fine(app, logged):
+    with app.app_context():
+        db.insert_product("Feijão 1kg", 800, 50, True)
+    html = logged.get("/produtos").get_data(as_text=True)
+    assert "Estoque baixo" not in html
+
+
+def test_low_stock_badge_in_reports(app, logged):
+    with app.app_context():
+        db.insert_product("Arroz 5kg", 2500, 0, True)
+    assert "Estoque baixo" in logged.get("/relatorios").get_data(as_text=True)
